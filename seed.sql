@@ -40,6 +40,13 @@ CREATE TABLE public.groups (
 	"rules" varchar NOT NULL,
 	"courselinks" varchar,
 	"size" integer NOT NULL,
+	"sunday" varchar,
+	"monday" varchar,
+	"tuesday" varchar,
+	"wednesday" varchar,
+	"thursday" varchar,
+	"friday" varchar,
+	"saturday" varchar,
 	"host_id" bigint NOT NULL,
 	CONSTRAINT "groups_pk" PRIMARY KEY ("_id")
 ) WITH (
@@ -69,10 +76,10 @@ INSERT INTO public.users VALUES (3, 'Jim', 'jim@gmail.com', 'password', 23, 'Mal
 INSERT INTO public.users VALUES (4, 'Mercer', 'mercer@gmail.com', 'password', 20, 'Male', 1, 'God mode');
  
 
-INSERT INTO public.groups VALUES (1, 'Algorithms', 'Computer Science', 'CS50 from Harvard', 'Just do not ditch', 'http://haravrd.edu', 4, 1);
-INSERT INTO public.groups VALUES (2, 'UI Design', 'Digital Arts', 'UX design on Udemy', 'Just do not ditch', 'http://udemy.com', 3, 2);
-INSERT INTO public.groups VALUES (3, 'React', 'Computer Science', 'Colt Steele React Course on Udemy', 'Just do not ditch', 'http://udemy.com', 2, 1);
-INSERT INTO public.groups VALUES (4, 'Express', 'Computer Science', 'Just Express on Udemy', 'Just do not ditch', 'http://udemy.com', 3, 2);
+INSERT INTO public.groups VALUES (1, 'Algorithms', 'Computer Science', 'CS50 from Harvard', 'Just do not ditch', 'http://harvard.edu', 4, '09:00-17:00', '09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','Not available', 1);
+INSERT INTO public.groups VALUES (2, 'UI Design', 'Digital Arts', 'UX design on Udemy', 'Just do not ditch', 'http://udemy.com', 3, '09:00-17:00', '09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','Not available', 2);
+INSERT INTO public.groups VALUES (3, 'React', 'Computer Science', 'Colt Steele React Course on Udemy', 'Just do not ditch', 'http://udemy.com', 2, '09:00-17:00', '09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','Not available', 1);
+INSERT INTO public.groups VALUES (4, 'Express', 'Computer Science', 'Just Express on Udemy', 'Just do not ditch', 'http://udemy.com', 3, '09:00-17:00', '09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','09:00-19:00','Not available', 2);
 
 
 INSERT INTO public.messages_in_group VALUES (1, 1, 1, 'Hi from Luis in Algorithms');

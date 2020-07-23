@@ -1,5 +1,7 @@
 const db = require('../models/userModel');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const userController = {};
 
 userController.getUsers = (req, res, next) => {
@@ -40,7 +42,8 @@ userController.register = (req, res, next) => {
 						};
 						db.query(createUserQuery)
 							.then(data => {
-								res.locals.user = data.rows[0];
+								let { name, email } = data.rows[0]
+								res.locals.user = { name, email };
 								return next();
 						}).catch(error => next(error));
           });
@@ -52,7 +55,7 @@ userController.register = (req, res, next) => {
 
 userController.login = (req, res, next) => {
 	let checkEmailExist = {
-		text: `SELECT name, email, password FROM users WHERE email = $1`,
+		text: `SELECT _id, name, email, password FROM users WHERE email = $1`,
 		values: [req.body.email]
 	};
 	db.query(checkEmailExist)
@@ -63,9 +66,9 @@ userController.login = (req, res, next) => {
 			// console.log(user.rows[0])
       bcrypt.compare(req.body.password, user.rows[0].password)
         .then(isMatch => {
-					console.log("in is match")
           if (isMatch) {
-						res.locals.user = user.rows[0];
+						let { _id, name, email } = user.rows[0]
+						res.locals.user = { _id, name, email };
             return next()
           } else {
             return res.status(400).json({password: 'Incorrect password'});
@@ -73,6 +76,47 @@ userController.login = (req, res, next) => {
         })
     })
 }
+
+userController.signToken = (req, res, next) => {
+	const token = jwt.sign(res.locals.user, process.env.JWT_SECRET, {
+    expiresIn: 3600
+	});
+	res.cookie('token', token, {
+		secure: false, // set to true if your using https
+		httpOnly: true,
+	});
+	return next();
+}
+
+userController.verifyToken = (req, res, next) => {
+	const token = req.cookies.token || "";
+	if (!token) {
+		return res.status(401).json('You need to Login')
+  }
+	jwt.verify(token, process.env.JWT_SECRET, (err, { _id, name, email }) => {
+		if(err) return res.status(500).json(err)
+		req.user = { _id, name, email };
+		return next();
+	})
+}
+
+userController.getMyGroups = (req, res, next) => {
+	// req.user_.id
+	let queryMyGroups= {
+		text: "SELECT g.subject, g.categories, g.size, g.courselinks FROM groups AS g JOIN messages_in_group AS m ON (m.group_id = g._id) JOIN users AS u ON (u._id = m.user_id) WHERE m.user_id = $1",
+		values: [req.user._id]
+	}
+  db.query(queryMyGroups)
+    .then((groups) => {
+			res.locals.myGroups = groups.rows;
+      return next();
+    })
+    .catch((err) => {
+      console.log(err)
+      return next(err)
+	  });
+};
+
 
 
 module.exports = userController;

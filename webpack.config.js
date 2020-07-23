@@ -12,7 +12,14 @@ module.exports = {
   devServer: {
     publicPath: '/build/',
     proxy: {
-      '/api': 'http://localhost:3000/'
+			'/api/**': {
+				target: 'http://localhost:3000/',
+				secure: false,
+			},
+			'/assets/**': {
+        target: 'http://localhost:3000/',
+        secure: false,
+      },
     }
   },
   plugins: [new MiniCssExtractPlugin()],
