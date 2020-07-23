@@ -4,7 +4,7 @@ const groupController = {};
 
 groupController.getGroups = (req, res, next) => {
 	// write code here
-	let i = 1
+	// let i = 1
 	// console.log("groupController")
   let queryGroups= {
 		text: `SELECT * FROM groups`,
@@ -12,6 +12,7 @@ groupController.getGroups = (req, res, next) => {
 	}
   db.query(queryGroups)
     .then((groups) => {
+      console.log(groups)
       res.locals.groups = groups.rows;
       return next();
     })
