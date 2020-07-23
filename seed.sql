@@ -18,25 +18,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-CREATE TABLE public.people
-(
-	"_id" serial NOT NULL,
-	"name" varchar NOT NULL,
-	"mass" varchar,
-	"hair_color" varchar,
-	"skin_color" varchar,
-	"eye_color" varchar,
-	"birth_year" varchar,
-	"gender" varchar,
-	"species_id" bigint,
-	"homeworld_id" bigint,
-	"height" integer,
-	CONSTRAINT "people_pk" PRIMARY KEY ("_id")
-)
-WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE public.users (
 	"_id" serial NOT NULL,
 	"name" varchar NOT NULL,
