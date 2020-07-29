@@ -2,11 +2,8 @@ const db = require('../models/userModel');
 const groupController = {};
 
 groupController.getGroups = (req, res, next) => {
-	// write code here
-	// let i = 1
-	// console.log("groupController")
   let queryGroups= {
-		text: `SELECT subject, categories, size, courselinks FROM groups`,
+		text: `SELECT _id, subject, categories, size, courselinks FROM groups`,
 	}
   db.query(queryGroups)
     .then((groups) => {
@@ -20,16 +17,12 @@ groupController.getGroups = (req, res, next) => {
 };
 
 groupController.getGroupDetails = (req, res, next) => {
-	// write code here
-	// let i = 1
-	// console.log("groupController")
   let queryGetGroup = {
-    text: `SELECT subject, descriptions, categories, rules, size, courselinks, host_id FROM groups WHERE _id = $1`,
+    text: `SELECT * FROM groups WHERE _id = $1`,
     values: [req.params.id]
 	}
   db.query(queryGetGroup)
     .then((group) => {
-      // console.log("get group details", group[0])
       res.locals.group = group.rows[0];
       return next();
     })
@@ -38,5 +31,35 @@ groupController.getGroupDetails = (req, res, next) => {
       return next(err)
 	  });
 };
+
+groupController.createGroup = (req, res, next) => {
+  const { subject, categories, descriptions, rules, courselinks, size, sunday, monday, tuesday, wednesday, thursday, friday, saturday } = req.body
+  console.log("beginning of create group")
+  let createGroupQuery = {
+     text: 'INSERT INTO public.groups(subject, categories, descriptions, rules, courselinks, size, sunday, monday, tuesday, wednesday, thursday, friday, saturday, host_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
+     values: [subject, categories, descriptions, rules, courselinks, size, sunday, monday, tuesday, wednesday, thursday, friday, saturday, req.user._id],
+  };
+  db.query(createGroupQuery)
+    .then(data => {
+      let { _id, subject, categories, descriptions, rules, courselinks, size, 
+          sunday, monday, tuesday, wednesday, thursday, friday, saturday, host_id 
+      } = data.rows[0]
+      res.locals.group = { _id, subject, categories, descriptions, rules, courselinks, size, 
+          sunday, monday, tuesday, wednesday, thursday, friday, saturday, host_id 
+      };
+      return next()
+  }).catch(error => next(error));
+};
+
+groupController.createRefToUser = (req, res, next) => {
+  let refQuery = {
+        text: 'INSERT INTO public.messages_in_group(user_id, group_id, messages) VALUES($1, $2, $3) RETURNING *',
+        values: [req.user._id, res.locals.group._id, "ref created"],
+      };
+    db.query(refQuery)
+    .then(data => {
+      return next();
+     }).catch(error => next(error));
+}
 
 module.exports = groupController;

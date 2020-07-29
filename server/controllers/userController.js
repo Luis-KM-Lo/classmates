@@ -85,10 +85,12 @@ userController.signToken = (req, res, next) => {
 		secure: false, // set to true if your using https
 		httpOnly: true,
 	});
+	console.log("0) Token is signed")
 	return next();
 }
 
 userController.verifyToken = (req, res, next) => {
+	console.log("beginning of verifyToken")
 	const token = req.cookies.token || "";
 	if (!token) {
 		return res.status(401).json('You need to Login')
@@ -96,6 +98,7 @@ userController.verifyToken = (req, res, next) => {
 	jwt.verify(token, process.env.JWT_SECRET, (err, { _id, name, email }) => {
 		if(err) return res.status(500).json(err)
 		req.user = { _id, name, email };
+		console.log("2) user sucessfully verified token")
 		return next();
 	})
 }
@@ -106,6 +109,7 @@ userController.getMyGroups = (req, res, next) => {
 		text: "SELECT g.subject, g.categories, g.size, g.courselinks FROM groups AS g JOIN messages_in_group AS m ON (m.group_id = g._id) JOIN users AS u ON (u._id = m.user_id) WHERE m.user_id = $1",
 		values: [req.user._id]
 	}
+	console.log("3) Within the controller getMyGroup")
   db.query(queryMyGroups)
     .then((groups) => {
 			res.locals.myGroups = groups.rows;

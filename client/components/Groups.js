@@ -26,10 +26,15 @@ class Groups extends Component {
 		const { groups } = this.state;
 		// console.log("this state", this.state.groups)
     return (
-      <div>
-				<h1>hi</h1>
+			<>
+			<img src="/assets/1.jpeg" alt="banner" className="banner" />
+			<h2 className="tagline">Meet your <span className="lightondark">buddy</span> now</h2>
+			<h1 className="u-center">Available Groups</h1>
+      <div className="group_section">
+				{/* <button onClick={() => { this.props.history.push("/login") } } >Login</button> */}
       	{groups.map(group => <Group {...group } key={group._id} />)}
 			</div>
+			</>
     );
   }
 }
