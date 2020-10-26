@@ -52,16 +52,17 @@ p {
 .nav_home .logo {
     width: 70%;
 }
-
 .banner {
     margin: 1rem auto;
     width: 100%;
+    height: 50%;
+    object-fit: cover;
     position: relative;
 }
 
 .tagline {
     position: absolute;
-    top: 90%;
+    top: 60%;
     left: 15%;
     color: white;
     font-size: 8rem;
@@ -130,6 +131,7 @@ a, a:link, a:visited {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .group_section_card {

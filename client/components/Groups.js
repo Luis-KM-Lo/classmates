@@ -27,8 +27,8 @@ class Groups extends Component {
 		// console.log("this state", this.state.groups)
     return (
 			<>
-			<img src="/assets/1.jpeg" alt="banner" className="banner" />
-			<h2 className="tagline">Meet your <span className="lightondark">buddy</span> now</h2>
+      <img src="/assets/1.jpeg" alt="banner" className="banner" />
+      <h2 className="tagline">Meet your <span className="lightondark">buddy</span> now</h2>
 			<h1 className="u-center">Available Groups</h1>
       <div className="group_section">
 				{/* <button onClick={() => { this.props.history.push("/login") } } >Login</button> */}
